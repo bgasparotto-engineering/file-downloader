@@ -1,0 +1,31 @@
+topics:
+  input:
+    downloadable-file: message.hansard-reader.downloadable-file
+  output:
+    downloaded-file: message.file-downloader.downloaded-file
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5434/file_downloader
+    username: postgres
+    password: password
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: hansard-reader
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    listener:
+      missing-topics-fatal: false
+    properties:
+      schema:
+        registry:
+          url: http://localhost:8081
