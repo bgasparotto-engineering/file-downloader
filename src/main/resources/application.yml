@@ -4,6 +4,9 @@ topics:
   output:
     downloaded-file: message.file-downloader.downloaded-file
 
+hdfs:
+  uri: hdfs://localhost:9000
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5434/file_downloader
