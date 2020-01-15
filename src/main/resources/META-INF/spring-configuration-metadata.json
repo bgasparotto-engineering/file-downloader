@@ -1,0 +1,16 @@
+{
+  "properties": [
+    {
+      "name": "hdfs.uri",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "topics.input.downloadable-file",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "topics.output.downloaded-file",
+      "type": "java.lang.String"
+    }
+  ]
+}
