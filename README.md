@@ -27,7 +27,7 @@ docker-compose -f hdfs/docker-compose.yml up -d
 ### This docker-compose
 ```shell script
 git clone https://github.com/bgasparotto-engineering/file-downloader
-cd hansard-reader
+cd file-downloader
 docker-compose up -d
 ```
 
