@@ -5,6 +5,10 @@
       "type": "java.lang.String"
     },
     {
+      "name": "hdfs.output.path",
+      "type": "java.lang.String"
+    },
+    {
       "name": "topics.input.downloadable-file",
       "type": "java.lang.String"
     },
