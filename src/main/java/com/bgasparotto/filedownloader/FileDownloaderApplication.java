@@ -25,7 +25,7 @@ public class FileDownloaderApplication {
     }
 
     @Bean
-    public Configuration conf(@Value("${hdfs.uri}") String hdfsUri) {
+    public Configuration hdfsConf(@Value("${hdfs.uri}") String hdfsUri) {
         Configuration hdfsConfiguration = new Configuration();
         hdfsConfiguration.set("fs.defaultFS", hdfsUri);
         hdfsConfiguration.set("dfs.client.use.datanode.hostname", "true");
