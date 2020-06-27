@@ -1,6 +1,9 @@
 package com.bgasparotto.filedownloader.service;
 
+import static org.apache.commons.lang3.StringUtils.substringAfterLast;
+
 import com.bgasparotto.filedownloader.message.DownloadableFile;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -12,14 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-
-import static org.apache.commons.lang3.StringUtils.substringAfterLast;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FileStreamerService {
+
     private final RestTemplate restTemplate;
     private final FileSystem hdfs;
 
@@ -49,7 +49,16 @@ public class FileStreamerService {
     }
 
     private Path pathForFile(DownloadableFile downloadableFile) {
-        String fileName = substringAfterLast(downloadableFile.getId(), "/");
+        String fileName = shortFileName(downloadableFile);
         return new Path(outputPath.concat(fileName));
+    }
+
+    private String shortFileName(DownloadableFile downloadableFile) {
+        String fileUri = downloadableFile.getUri();
+
+        if (fileUri.contains("/")) {
+            return substringAfterLast(fileUri, "/");
+        }
+        return fileUri;
     }
 }
