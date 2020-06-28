@@ -3,6 +3,7 @@ package com.bgasparotto.filedownloader.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.bgasparotto.filedownloader.message.DownloadableFile;
+import com.bgasparotto.filedownloader.model.DistributedFile;
 import java.io.IOException;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -35,10 +36,10 @@ public class FileStreamerServiceTest {
     public void shouldStreamDownloadableFileToFileStorage() throws IOException {
         DownloadableFile downloadableFile = testDownloadableFile();
 
-        Path streamedFile = fileStreamerService.stream(downloadableFile);
+        DistributedFile streamedFile = fileStreamerService.stream(downloadableFile);
 
         Path expectedFilePath = new Path("/test/hansard/raw/bgasparotto-cube.png");
-        assertThat(streamedFile).isEqualTo(expectedFilePath);
+        assertThat(streamedFile.getPathAsString()).isEqualTo(expectedFilePath.toString());
         assertThat(hdfs.exists(expectedFilePath)).isTrue();
     }
 
