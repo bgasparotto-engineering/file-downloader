@@ -13,7 +13,14 @@ docker-compose up -d
 Then run the main class `FileDownloaderApplication.java`
 
 ## Interacting with the service
-1. Produce Kafka messages to `message.hansard-reader.downloadable-file` using the schema from `DownloadableFile.avsc`;
+1. Run the `kafka-producer.sh` script to produce messages:
+```
+./kafka-producer.sh message.hansard-reader.downloadable-file input/DownloadableFile.avsc
+```
+then paste the content:
+```
+{"id":"test-file","title":"Test File","uri":"https://bgasparotto.com/wp-content/uploads/2015/04/bgasparotto-cube.png"}
+```
 2. Check the logs where the consumed messages will be displayed as a result;
 3. Visit http://localhost:9870/ and lookout for the Web UI file browser to view the downloaded files.
 
