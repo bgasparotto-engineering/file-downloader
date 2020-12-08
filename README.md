@@ -19,7 +19,7 @@ Then run the main class `FileDownloaderApplication.java`
 ```
 then paste the content:
 ```
-{"id":"test-file","title":"Test File","uri":"https://bgasparotto.com/wp-content/uploads/2015/04/bgasparotto-cube.png"}
+{"id":"test/test-file","title":"Test File","uri":"https://bgasparotto.com/wp-content/uploads/2015/04/bgasparotto-cube.png"}
 ```
 2. Check the logs where the consumed messages will be displayed as a result;
 3. Visit http://localhost:9870/ and lookout for the Web UI file browser to view the downloaded files.
