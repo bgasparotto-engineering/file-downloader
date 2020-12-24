@@ -7,10 +7,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.bgasparotto.filedownloader.message.DownloadableFile;
+import com.bgasparotto.filedownloader.model.DistributedFile;
 import com.bgasparotto.filedownloader.service.FilePublisherService;
 import com.bgasparotto.filedownloader.service.FileStreamerService;
 import com.bgasparotto.spring.kafka.avro.test.EmbeddedKafkaAvro;
-import org.apache.hadoop.fs.Path;
+import java.nio.file.Path;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,22 +55,13 @@ public class DownloadableFileConsumerTest {
     @Captor
     private ArgumentCaptor<DownloadableFile> downloadableFileCaptor;
 
-    @Captor
-    private ArgumentCaptor<String> resultIdCaptor;
-
-    @Captor
-    private ArgumentCaptor<String> resultTitleCaptor;
-
-    @Captor
-    private ArgumentCaptor<Path> resultPathCaptor;
-
-    private Path downloadedFileToPublish;
-
     @BeforeEach
     public void setUp() {
-        downloadedFileToPublish = new Path("hdfs/some/path/to/file.zip");
         when(mockFileStreamerService.stream(any(DownloadableFile.class)))
-            .thenReturn(downloadedFileToPublish);
+            .then(i -> {
+                DownloadableFile input = i.getArgument(0, DownloadableFile.class);
+                return new DistributedFile(input.getId(), input.getTitle(), Path.of("hdfs/some/path/to/file.zip"));
+            });
     }
 
     @Test
@@ -108,12 +100,8 @@ public class DownloadableFileConsumerTest {
         assertThat(streamedFile).isEqualTo(downloadableFile);
     }
 
-    @SuppressWarnings("unchecked")
     private void assertResultIsPublished() {
         verify(mockFilePublisherService, timeout(FIVE_SECONDS).times(1))
-            .publish(resultIdCaptor.capture(), resultTitleCaptor.capture(), resultPathCaptor.capture());
-
-        Path publishedPath = resultPathCaptor.getValue();
-        assertThat(publishedPath).isEqualTo(downloadedFileToPublish);
+            .publish(any(DistributedFile.class));
     }
 }
