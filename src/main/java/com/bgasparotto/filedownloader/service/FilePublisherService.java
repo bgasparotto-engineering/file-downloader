@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class FilePublisherService {
+
     private final DownloadedFileProducer downloadedFileProducer;
 
     public void publish(DistributedFile distributedFile) {
         DownloadedFile downloadedFile = DownloadedFile.newBuilder()
-            .setId(distributedFile.getId())
-            .setTitle(distributedFile.getTitle())
             .setPath(distributedFile.getPathAsString())
             .build();
 
