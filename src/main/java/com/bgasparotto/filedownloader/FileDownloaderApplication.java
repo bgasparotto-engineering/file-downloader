@@ -28,7 +28,6 @@ public class FileDownloaderApplication {
     public Configuration hdfsConf(@Value("${hdfs.uri}") String hdfsUri) {
         Configuration hdfsConfiguration = new Configuration();
         hdfsConfiguration.set("fs.defaultFS", hdfsUri);
-        hdfsConfiguration.set("dfs.client.use.datanode.hostname", "true");
         hdfsConfiguration.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         hdfsConfiguration.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
 
