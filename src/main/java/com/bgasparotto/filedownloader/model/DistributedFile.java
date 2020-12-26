@@ -1,18 +1,20 @@
 package com.bgasparotto.filedownloader.model;
 
 import java.nio.file.Path;
-import lombok.ToString;
 import lombok.Value;
+import org.apache.commons.io.FileUtils;
 
 @Value
-@ToString(of = "path")
 public class DistributedFile {
 
-    private final String id;
-    private final String title;
     private final Path path;
+    private final int size;
 
     public String getPathAsString() {
         return path.toString();
+    }
+
+    public String getSizeAsString() {
+        return FileUtils.byteCountToDisplaySize(size);
     }
 }
