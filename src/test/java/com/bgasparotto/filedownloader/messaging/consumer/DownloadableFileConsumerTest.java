@@ -2,16 +2,18 @@ package com.bgasparotto.filedownloader.messaging.consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.bgasparotto.filedownloader.message.DownloadableFile;
 import com.bgasparotto.filedownloader.model.DistributedFile;
+import com.bgasparotto.filedownloader.service.FileDownloaderService;
 import com.bgasparotto.filedownloader.service.FilePublisherService;
-import com.bgasparotto.filedownloader.service.FileStreamerService;
 import com.bgasparotto.spring.kafka.avro.test.EmbeddedKafkaAvro;
 import java.nio.file.Path;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +43,7 @@ public class DownloadableFileConsumerTest {
     private String topic;
 
     @MockBean
-    private FileStreamerService mockFileStreamerService;
+    private FileDownloaderService mockFileDownloaderService;
 
     @MockBean
     private FilePublisherService mockFilePublisherService;
@@ -53,14 +55,14 @@ public class DownloadableFileConsumerTest {
     private ArgumentCaptor<ConsumerRecord<String, DownloadableFile>> downloadableFileMessageCaptor;
 
     @Captor
-    private ArgumentCaptor<DownloadableFile> downloadableFileCaptor;
+    private ArgumentCaptor<String> uriToDownloadCaptor;
 
     @BeforeEach
     public void setUp() {
-        when(mockFileStreamerService.stream(any(DownloadableFile.class)))
+        when(mockFileDownloaderService.download(anyString()))
             .then(i -> {
-                DownloadableFile input = i.getArgument(0, DownloadableFile.class);
-                return new DistributedFile(input.getId(), input.getTitle(), Path.of("hdfs/some/path/to/file.zip"));
+                String input = i.getArgument(0, String.class);
+                return new DistributedFile(Path.of(input), RandomUtils.nextInt(1024, 2048));
             });
     }
 
@@ -71,7 +73,7 @@ public class DownloadableFileConsumerTest {
         embeddedKafkaAvro.produce(topic, inputMessageKey, inputMessageValue);
 
         assertMessageIsConsumed(inputMessageKey, inputMessageValue);
-        assertFileIsStreamed(inputMessageValue);
+        assertFileIsDownloaded(inputMessageValue);
         assertResultIsPublished();
     }
 
@@ -92,12 +94,12 @@ public class DownloadableFileConsumerTest {
         assertThat(consumedRecord.value()).isEqualTo(inputMessageValue);
     }
 
-    private void assertFileIsStreamed(DownloadableFile downloadableFile) {
-        verify(mockFileStreamerService, timeout(FIVE_SECONDS).times(1))
-            .stream(downloadableFileCaptor.capture());
+    private void assertFileIsDownloaded(DownloadableFile downloadableFile) {
+        verify(mockFileDownloaderService, timeout(FIVE_SECONDS).times(1))
+            .download(uriToDownloadCaptor.capture());
 
-        DownloadableFile streamedFile = downloadableFileCaptor.getValue();
-        assertThat(streamedFile).isEqualTo(downloadableFile);
+        String path = uriToDownloadCaptor.getValue();
+        assertThat(path).isEqualTo(downloadableFile.getUri());
     }
 
     private void assertResultIsPublished() {
