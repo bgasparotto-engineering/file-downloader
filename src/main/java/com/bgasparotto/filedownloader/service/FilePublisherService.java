@@ -14,8 +14,9 @@ public class FilePublisherService {
 
     private final DownloadedFileProducer downloadedFileProducer;
 
-    public void publish(DistributedFile distributedFile) {
+    public void publish(String fileId, DistributedFile distributedFile) {
         DownloadedFile downloadedFile = DownloadedFile.newBuilder()
+            .setId(fileId)
             .setPath(distributedFile.getPathAsString())
             .build();
 

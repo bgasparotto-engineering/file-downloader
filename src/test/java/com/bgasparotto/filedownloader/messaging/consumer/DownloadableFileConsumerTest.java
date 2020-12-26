@@ -102,6 +102,6 @@ public class DownloadableFileConsumerTest {
 
     private void assertResultIsPublished() {
         verify(mockFilePublisherService, timeout(FIVE_SECONDS).times(1))
-            .publish(any(DistributedFile.class));
+            .publish(anyString(), any(DistributedFile.class));
     }
 }

@@ -41,7 +41,6 @@ public class DownloadedFileProducerTest {
     private DownloadedFile buildTestMessage() {
         return DownloadedFile.newBuilder()
             .setId("some-message-id")
-            .setTitle("Some Title")
             .setPath("some/storage/path/for/file.zip")
             .build();
     }
