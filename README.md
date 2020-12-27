@@ -1,3 +1,7 @@
+![build](https://github.com/bgasparotto/file-downloader/workflows/build/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bgasparotto_file-downloader&metric=alert_status)](https://sonarcloud.io/dashboard?id=bgasparotto_file-downloader)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bgasparotto_file-downloader&metric=coverage)](https://sonarcloud.io/dashboard?id=bgasparotto_file-downloader)
+
 # File Downloader
 Microservice for streaming files from HTTP endpoints directly to HDFS. The URL's and the stream are triggered by
 messages on Apache Kafka. The resulting downloaded file is place on HDFS and its path shared on another Kafka topic.
