@@ -5,7 +5,7 @@ if [ -z "$topic" ]; then
   exit 1
 fi
 
-schema_registry_container=$(docker container ps | grep schema-registry | awk '{print $1}')
+schema_registry_container=$(docker container ls -q --filter name='^/schema-registry$')
 if [ -z "$schema_registry_container" ]; then
   echo "Schema registry not running. Run 'docker-compose up -d' and try again"
   exit 1
