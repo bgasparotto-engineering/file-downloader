@@ -9,6 +9,8 @@ topics:
 
 hdfs:
   uri: hdfs://localhost:9000
+  client:
+    socket-timeout: 5000
   output:
     path: /hansard/raw/
 
