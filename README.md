@@ -13,8 +13,19 @@ git clone https://github.com/bgasparotto-engineering/file-downloader
 cd file-downloader
 docker-compose up -d
 ```
+### Linux
+Run the main class `FileDownloaderApplication.java`
 
-Then run the main class `FileDownloaderApplication.java`
+### MacOS
+Since 
+[Docker for Mac doesn't expose hostnames or IP addresses of its containers](https://docs.docker.com/docker-for-mac/networking/) 
+to the host, the HDFS nodes will be unreachable if the Java application runs on the host, so you 
+must run it on Docker as well:
+```shell
+./gradlew bootJar
+docker build -t file-downloader-local .
+docker run -e "SPRING_PROFILES_ACTIVE=docker" --net=hdfs-network file-downloader-local
+```
 
 ## Interacting with the service
 1. Run the `kafka-producer.sh` script to produce messages:

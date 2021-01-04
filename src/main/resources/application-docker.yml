@@ -1,0 +1,10 @@
+hdfs:
+  uri: hdfs://host.docker.internal:9000
+
+spring:
+  kafka:
+    bootstrap-servers: host.docker.internal:39092
+    properties:
+      schema:
+        registry:
+          url: http://host.docker.internal:8081
