@@ -9,19 +9,12 @@ topics:
 
 hdfs:
   uri: hdfs://localhost:9000
+  client:
+    socket-timeout: 5000
   output:
     path: /hansard/raw/
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5434/file_downloader
-    username: postgres
-    password: password
-  flyway:
-    enabled: false
-  jpa:
-    hibernate:
-      ddl-auto: validate
   kafka:
     bootstrap-servers: localhost:9092
     consumer:

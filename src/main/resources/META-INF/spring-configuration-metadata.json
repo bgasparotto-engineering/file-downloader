@@ -5,6 +5,10 @@
       "type": "java.lang.String"
     },
     {
+      "name": "hdfs.client.socket-timeout",
+      "type": "java.lang.String"
+    },
+    {
       "name": "hdfs.output.path",
       "type": "java.lang.String"
     },

@@ -22,6 +22,9 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    integrationTestImplementation {
+        extendsFrom testImplementation
+    }
 }
 
 repositories {
@@ -31,11 +34,18 @@ repositories {
     }
 }
 
+sourceSets {
+    integrationTest {
+        java.srcDir "$projectDir/src/integrationTest/java"
+        resources.srcDir "$projectDir/src/integrationTest/resources"
+        compileClasspath += sourceSets.main.output + test.output
+        runtimeClasspath += sourceSets.main.output + test.output
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.flywaydb:flyway-core'
 
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.apache.avro:avro:1.9.1'
@@ -58,12 +68,20 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
+}
+
+task integrationTest(type: Test) {
+    dependsOn test
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 jacocoTestReport {
+    executionData { tasks.withType(Test).findAll { it.jacoco.destinationFile.exists() }*.jacoco.destinationFile }
     reports {
         xml.enabled true
+        xml.destination(file("${jacoco.reportsDir}/all-tests/jacocoAllTestReport.xml"))
     }
 }
 
@@ -72,5 +90,8 @@ sonarqube {
         property "sonar.projectKey", "bgasparotto_file-downloader"
         property "sonar.organization", "bgasparotto-github"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination
+        properties["sonar.junit.reportPaths"] += integrationTest.reports.junitXml.destination
+        properties["sonar.tests"] += sourceSets.integrationTest.allSource.srcDirs
     }
 }

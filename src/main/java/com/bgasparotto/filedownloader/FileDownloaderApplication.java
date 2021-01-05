@@ -25,11 +25,17 @@ public class FileDownloaderApplication {
     }
 
     @Bean
-    public Configuration hdfsConf(@Value("${hdfs.uri}") String hdfsUri) {
+    public Configuration hdfsConf(
+            @Value("${hdfs.uri}") String hdfsUri,
+            @Value("${hdfs.client.socket-timeout}") String socketTimeout
+    ) {
+
         Configuration hdfsConfiguration = new Configuration();
         hdfsConfiguration.set("fs.defaultFS", hdfsUri);
         hdfsConfiguration.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         hdfsConfiguration.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+
+        hdfsConfiguration.set("dfs.client.socket-timeout", socketTimeout);
 
         return hdfsConfiguration;
     }

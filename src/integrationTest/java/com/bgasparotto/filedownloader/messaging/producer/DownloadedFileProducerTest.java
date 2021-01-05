@@ -14,7 +14,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(properties = {"spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"})
-@ActiveProfiles("test")
+@ActiveProfiles("it")
 @EmbeddedKafka
 @DirtiesContext
 public class DownloadedFileProducerTest {
