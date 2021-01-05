@@ -16,7 +16,7 @@ docker-compose up -d
 ### Linux
 Run the main class `FileDownloaderApplication.java`
 
-### MacOS
+### macOS
 Since 
 [Docker for Mac doesn't expose hostnames or IP addresses of its containers](https://docs.docker.com/docker-for-mac/networking/) 
 to the host, the HDFS nodes will be unreachable if the Java application runs on the host, so you 
@@ -39,7 +39,7 @@ then paste the content:
 2. Check the logs where the consumed messages will be displayed as a result;
 3. Visit http://localhost:9870/ and lookout for the Web UI file browser to view the downloaded files.
 
-### Generating Avro source code
+## Generating Avro source code
 This project uses [Gradle Avro Plugin](https://github.com/davidmc24/gradle-avro-plugin) for generating Java classes for
 schemas defined in `.avsc` files:
 ```shell script
