@@ -71,13 +71,14 @@ test {
 }
 
 task integrationTest(type: Test) {
+    dependsOn test
     useJUnitPlatform()
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 jacocoTestReport {
-    executionData tasks.withType(Test).findAll { it.state.executed }
+    executionData { tasks.withType(Test).findAll { it.jacoco.destinationFile.exists() }*.jacoco.destinationFile }
     reports {
         xml.enabled true
         xml.destination(file("${jacoco.reportsDir}/all-tests/jacocoAllTestReport.xml"))
@@ -91,6 +92,6 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination
         properties["sonar.junit.reportPaths"] += integrationTest.reports.junitXml.destination
-        properties["sonar.tests"] += sourceSets.integrationTest.allSource.srcDirs.findAll { it.exists() }
+        properties["sonar.tests"] += sourceSets.integrationTest.allSource.srcDirs
     }
 }
