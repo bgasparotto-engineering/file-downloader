@@ -22,12 +22,24 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    integrationTestImplementation {
+        extendsFrom testImplementation
+    }
 }
 
 repositories {
     mavenCentral()
     maven {
         url 'https://packages.confluent.io/maven/'
+    }
+}
+
+sourceSets {
+    integrationTest {
+        java.srcDir "$projectDir/src/it/java"
+        resources.srcDir "$projectDir/src/it/resources"
+        compileClasspath += sourceSets.main.output + test.output
+        runtimeClasspath += sourceSets.main.output + test.output
     }
 }
 
@@ -56,7 +68,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 jacocoTestReport {

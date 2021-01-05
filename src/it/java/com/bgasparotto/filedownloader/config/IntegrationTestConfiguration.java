@@ -4,8 +4,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile("test")
+@Profile("it")
 @Configuration
 @ComponentScan("com.bgasparotto.spring.kafka.avro.test")
-public class TestConfiguration {
+public class IntegrationTestConfiguration {
 }

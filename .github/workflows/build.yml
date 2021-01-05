@@ -11,7 +11,7 @@ jobs:
         with:
           java-version: '11'
       - name: Test
-        run: ./gradlew test
+        run: ./gradlew test integrationTest
 
   sonar:
     needs: test
@@ -28,4 +28,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew test jacocoTestReport sonarqube
+        run: ./gradlew test integrationTest jacocoTestReport sonarqube
