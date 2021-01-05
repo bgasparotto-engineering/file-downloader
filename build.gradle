@@ -77,8 +77,10 @@ task integrationTest(type: Test) {
 }
 
 jacocoTestReport {
+    executionData tasks.withType(Test).findAll { it.state.executed }
     reports {
         xml.enabled true
+        xml.destination(file("${jacoco.reportsDir}/all-tests/jacocoAllTestReport.xml"))
     }
 }
 
@@ -87,5 +89,8 @@ sonarqube {
         property "sonar.projectKey", "bgasparotto_file-downloader"
         property "sonar.organization", "bgasparotto-github"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination
+        properties["sonar.junit.reportPaths"] += integrationTest.reports.junitXml.destination
+        properties["sonar.tests"] += sourceSets.integrationTest.allSource.srcDirs
     }
 }
