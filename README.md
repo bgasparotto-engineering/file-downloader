@@ -32,6 +32,10 @@ docker build -t file-downloader-local .
 docker run -e "SPRING_PROFILES_ACTIVE=docker" --net=hdfs-network file-downloader-local
 ```
 
+### Cluster
+This container can also be installed on a cluster manager such as Kubernetes. To run it on a 
+cluster, activate the Spring profile `cluster` and provide the environment variables it requires.
+
 ## Interacting with the service
 1. Run the `kafka-producer.sh` script to produce messages:
 ```
