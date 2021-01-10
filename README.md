@@ -14,7 +14,12 @@ cd file-downloader
 docker-compose up -d
 ```
 ### Linux
-Run the main class `FileDownloaderApplication.java`
+Run the main class `FileDownloaderApplication.java` on the IDE, or run on Docker:
+```shell
+./gradlew bootJar
+docker build -t file-downloader-local .
+docker run --net=host file-downloader-local
+```
 
 ### macOS
 Since 
