@@ -71,17 +71,20 @@ test {
 }
 
 task integrationTest(type: Test) {
-    dependsOn test
     useJUnitPlatform()
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 jacocoTestReport {
+    dependsOn test
+    dependsOn integrationTest
     executionData { tasks.withType(Test).findAll { it.jacoco.destinationFile.exists() }*.jacoco.destinationFile }
     reports {
         xml.enabled true
         xml.destination(file("${jacoco.reportsDir}/all-tests/jacocoAllTestReport.xml"))
+        html.enabled true
+        html.destination(file("${jacoco.reportsDir}/all-tests/html"))
     }
 }
 
