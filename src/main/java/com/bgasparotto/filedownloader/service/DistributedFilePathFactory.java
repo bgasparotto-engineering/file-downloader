@@ -1,16 +1,19 @@
 package com.bgasparotto.filedownloader.service;
 
-import static org.apache.commons.lang3.StringUtils.substringAfterLast;
-
-import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
+
+import static org.apache.commons.lang3.StringUtils.substringAfterLast;
+
 @Service
 public class DistributedFilePathFactory {
+    private final String distributedFileSystemPath;
 
-    @Value("${hdfs.output.path}")
-    private String distributedFileSystemPath;
+    public DistributedFilePathFactory(@Value("${hdfs.output.path}") String distributedFileSystemPath) {
+        this.distributedFileSystemPath = distributedFileSystemPath;
+    }
 
     public Path fromUri(String uri) {
         String fileName = shortFileName(uri);
